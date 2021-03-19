@@ -1,0 +1,145 @@
+service: etl-rds
+
+provider:
+  name: aws
+  runtime: python3.7
+  environment:
+    STAGE: ${self:custom.stage}
+
+
+functions:
+  etlRdsCreateDB:
+    handler: create_db.handler
+    runtime: python3.7
+    timeout: 600
+    environment:
+      BUCKET_NAME: ${self:custom.environment.BUCKET_NAME.${self:custom.stage}}
+      SECRET_NAME: ${self:custom.environment.SECRET_NAME.${self:custom.stage}}
+      REGION_NAME: ${self:custom.environment.REGION}
+    vpc:
+      securityGroupIds:
+        - ${self:custom.environment.SECURITY_GROUP.${self:custom.stage}}
+      subnetIds:
+        - subnet-e6b334cb
+        - subnet-a37f38c6
+        - subnet-a47a0ced
+        - subnet-e0f12adc
+        - subnet-e841c0e4
+        - subnet-818139da
+        # - ${self:custom.environment.SUBNET_ID.${self:custom.stage}}
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          # - s3:GetObject
+          # - s3:ListBucket
+          - s3:*
+        Resource:
+          - arn:aws:s3:::${self:custom.environment.BUCKET_NAME.${self:custom.stage}}
+          - arn:aws:s3:::${self:custom.environment.BUCKET_NAME.${self:custom.stage}}/*
+      - Effect: "Allow"
+        Action:
+          - rds:*
+          - ec2:*
+          - logs:*
+        Resource: "*"
+      - Effect: "Allow"
+        Action:
+          - secretsmanager:GetSecretValue
+        Resource: arn:aws:secretsmanager:us-east-1:938175376514:secret:db-customer-FXOczk
+    events:
+      - s3:
+          bucket: ${self:custom.environment.BUCKET_NAME.${self:custom.stage}}
+          event: s3:ObjectCreated:*
+          rules:
+            - suffix: .sql
+          existing: true
+  etlRdsEtl:
+    handler: etl.handler
+    runtime: python3.7
+    timeout: 600
+    environment:
+      BUCKET_NAME: ${self:custom.environment.BUCKET_NAME.${self:custom.stage}}
+      SECRET_NAME: ${self:custom.environment.SECRET_NAME.${self:custom.stage}}
+      REGION_NAME: ${self:custom.environment.REGION}
+    vpc:
+      securityGroupIds:
+        - ${self:custom.environment.SECURITY_GROUP.${self:custom.stage}}
+      subnetIds:
+        - subnet-e6b334cb
+        - subnet-a37f38c6
+        - subnet-a47a0ced
+        - subnet-e0f12adc
+        - subnet-e841c0e4
+        - subnet-818139da
+        # - ${self:custom.environment.SUBNET_ID.${self:custom.stage}}
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          # - s3:GetObject
+          # - s3:ListBucket
+          - s3:*
+        Resource:
+          - arn:aws:s3:::${self:custom.environment.BUCKET_NAME.${self:custom.stage}}
+          - arn:aws:s3:::${self:custom.environment.BUCKET_NAME.${self:custom.stage}}/*
+      - Effect: "Allow"
+        Action:
+          - rds:*
+          - ec2:*
+          - logs:*
+        Resource: "*"
+      - Effect: "Allow"
+        Action:
+          - secretsmanager:GetSecretValue
+        Resource: arn:aws:secretsmanager:us-east-1:938175376514:secret:db-customer-FXOczk
+    events:
+      - s3:
+          bucket: ${self:custom.environment.BUCKET_NAME.${self:custom.stage}}
+          event: s3:ObjectCreated:*
+          rules:
+            - suffix: .csv
+          existing: true
+  etlRdsGet:
+    handler: get.handler
+    runtime: python3.7
+    timeout: 600
+    environment:
+      SECRET_NAME: ${self:custom.environment.SECRET_NAME.${self:custom.stage}}
+      REGION_NAME: ${self:custom.environment.REGION}
+    vpc:
+      securityGroupIds:
+        - ${self:custom.environment.SECURITY_GROUP.${self:custom.stage}}
+      subnetIds:
+        - subnet-e6b334cb
+        - subnet-a37f38c6
+        - subnet-a47a0ced
+        - subnet-e0f12adc
+        - subnet-e841c0e4
+        - subnet-818139da
+        # - ${self:custom.environment.SUBNET_ID.${self:custom.stage}}
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - rds:*
+          - ec2:*
+          - logs:*
+        Resource: "*"
+      - Effect: "Allow"
+        Action:
+          - secretsmanager:GetSecretValue
+        Resource: arn:aws:secretsmanager:us-east-1:938175376514:secret:db-customer-FXOczk
+    events:
+      - http:
+          method: get
+          path: /nma/{id}
+          cors: true
+
+
+custom: ${file(./custom.environment.yml)}
+
+plugins:
+  - serverless-iam-roles-per-function
+  - serverless-python-requirements
+
+resources:
+  - ${file(./resources/apigateway.yml)}
+  - ${file(./resources/s3.yml)}

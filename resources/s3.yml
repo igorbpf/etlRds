@@ -1,0 +1,23 @@
+Resources:
+  ScriptsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: ${self:custom.environment.BUCKET_NAME.${self:custom.stage}}
+      AccessControl: Private
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders: ["*"]
+            AllowedMethods: ["PUT"]
+            AllowedOrigins: ["*"]
+
+
+
+Outputs:
+  ScriptsBucket:
+    Value:
+      Ref: ScriptsBucket
+  ScriptsBucketArn:
+    Value:
+      Fn::GetAtt:
+        - ScriptsBucket
+        - Arn

@@ -1,0 +1,17 @@
+stage: ${opt:stage, self:provider.stage}
+pythonRequirements:
+  dockerizePip: non-linux
+environment:
+  REGION: us-east-1
+  BUCKET_NAME:
+    dev: euinvisto21343-etl-rds-dev
+    prod: euinvisto76543-etl-rds-prod
+  SECURITY_GROUP:
+    dev: sg-06dc0a23e609e32ca
+    prod: sg-06dc0a23e609e32ca
+  SUBNET_ID:
+    dev: itax-etl-rds-dev
+    prod: itax-etl-rds-prod
+  SECRET_NAME:
+    dev: db-customer
+    prod: db-customer
