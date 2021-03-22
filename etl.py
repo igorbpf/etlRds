@@ -12,7 +12,7 @@ import pymysql
 # rds settings
 user, password, host, db_name, db_port = get_secret()
 
-region_name = os.environ.get("REGION_NAME", "")
+region_name = os.environ.get("REGION_NAME", "sa-east-1")
 
 # Resource S3
 s3 = boto3.resource('s3', region_name=region_name,
@@ -36,16 +36,19 @@ except pymysql.MySQLError as e:
 logger.info("SUCCESS: Connection to RDS MySQL instance succeeded")
 
 
-def insert_data(table_name, data, columns, key_columns):
+def insert_data(table_name, data, columns, key_columns=None):
 
     number_columns = len(columns)
 
     update_columns = columns.copy()
 
-    for key_column in key_columns:
-        update_columns.remove(key_column)
+    if key_columns:
+        for key_column in key_columns:
+            update_columns.remove(key_column)
 
-    number_update_columns = len(update_columns)
+        number_update_columns = len(update_columns)
+    else:
+        number_update_columns = number_columns
 
     column_str = ("""{},""" * number_columns)[:-1]
     column_str = column_str.format(*columns)
