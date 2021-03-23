@@ -138,6 +138,8 @@ custom: ${file(./custom.environment.yml)}
 plugins:
   - serverless-iam-roles-per-function
   - serverless-python-requirements
+  - serverless-api-gateway-caching
+
 
 resources:
   - ${file(./resources/apigateway.yml)}

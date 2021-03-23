@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
+    "serverless-api-gateway-caching": "^1.6.1",
     "serverless-iam-roles-per-function": "^3.1.0",
     "serverless-python-requirements": "^5.1.0"
   }

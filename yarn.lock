@@ -216,10 +216,20 @@ lodash.get@^4.4.2:
   resolved "https://registry.yarnpkg.com/lodash.get/-/lodash.get-4.4.2.tgz#2d177f652fa31e939b4438d5341499dfa3825e99"
   integrity sha1-LRd/ZS+jHpObRDjVNBSZ36OCXpk=
 
+lodash.isempty@^4.4.0:
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/lodash.isempty/-/lodash.isempty-4.4.0.tgz#6f86cbedd8be4ec987be9aaf33c9684db1b31e7e"
+  integrity sha1-b4bL7di+TsmHvpqvM8loTbGzHn4=
+
 lodash.set@^4.3.2:
   version "4.3.2"
   resolved "https://registry.yarnpkg.com/lodash.set/-/lodash.set-4.3.2.tgz#d8757b1da807dde24816b0d6a84bea1a76230b23"
   integrity sha1-2HV7HagH3eJIFrDWqEvqGnYjCyM=
+
+lodash.split@^4.4.0:
+  version "4.4.2"
+  resolved "https://registry.yarnpkg.com/lodash.split/-/lodash.split-4.4.2.tgz#a7f7bd9f37968b9312428e2f3ac3fb3173c4c3c6"
+  integrity sha1-p/e9nzeWi5MSQo4vOsP7MXPEw8Y=
 
 lodash.uniqby@^4.0.0:
   version "4.7.0"
@@ -323,6 +333,15 @@ safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   version "5.1.2"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.2.tgz#991ec69d296e0313747d59bdfd2b745c35f8828d"
   integrity sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g==
+
+serverless-api-gateway-caching@^1.6.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/serverless-api-gateway-caching/-/serverless-api-gateway-caching-1.6.1.tgz#cab3fc55324a15f87ae75d343c56f5eb835b28c3"
+  integrity sha512-BRV8+yPK4o+hfywdRqkeoI94EGoiuES89DXS5UcnVMuTp9WJs1tQfMQL6JkiI871Q1xBctUaE/u3lNlNYKIJKw==
+  dependencies:
+    lodash.get "^4.4.2"
+    lodash.isempty "^4.4.0"
+    lodash.split "^4.4.0"
 
 serverless-iam-roles-per-function@^3.1.0:
   version "3.1.0"

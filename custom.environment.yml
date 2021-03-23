@@ -1,6 +1,8 @@
 stage: ${opt:stage, self:provider.stage}
 pythonRequirements:
   dockerizePip: non-linux
+apiGatewayCaching:
+  enabled: true
 environment:
   REGION: us-east-1
   BUCKET_NAME:
