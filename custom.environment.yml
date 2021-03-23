@@ -13,5 +13,6 @@ environment:
     dev: itax-etl-rds-dev
     prod: itax-etl-rds-prod
   SECRET_NAME:
-    dev: db-customer
-    prod: db-customer
+    dev: customer-secret
+    prod: customer-secret
+  SECRET_ARN: arn:aws:secretsmanager:us-east-1:938175376514:secret:customer-secret-iS4UZ0

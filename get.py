@@ -35,19 +35,13 @@ def handler(event, context):
     This function gets data from MySQL RDS instance
     """
     try:
-        with conn.cursor() as cur:
-            cur.execute("show tables;")
-            resp = cur.fetchall()
-            logger.info("***********************************")
-            logger.info(host)
-            logger.info(db_name)
-            logger.info(resp)
-            logger.info("***********************************")
-
         table_name = event.get("pathParameters").get("id")
         sql = f"""SELECT * FROM {table_name};"""
         df = pd.read_sql(sql, con=conn)
         data = list(df.T.to_dict().values())
+        logger.info("=========================================")
+        logger.info(data)
+        logger.info("=========================================")
         # create a response
         return {'statusCode': 200,
                 'body': data}

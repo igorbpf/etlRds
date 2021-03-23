@@ -7,6 +7,7 @@ from read_secret import get_secret
 import boto3
 import botocore
 import pymysql
+from datetime import datetime
 
 
 # rds settings
@@ -62,6 +63,11 @@ def insert_data(table_name, data, columns, key_columns=None):
     final_str = "INSERT INTO %s (%s) VALUES (%s) ON DUPLICATE KEY UPDATE %s " % (
         table_name, column_str, insert_str, update_str)
 
+    logger.info("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+    logger.info(final_str)
+    logger.info(data)
+    logger.info("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+
     with conn.cursor() as cur:
         for datum in data:
             cur.execute(final_str, datum)
@@ -87,27 +93,40 @@ def handler(event, context):
     data_cliente = []
     data_especialista = []
 
+    now = datetime.now()
+
+    data_hora = now.strftime('%Y-%m-%d %H:%M:%S')
+    data = now.strftime('%Y-%m-%d')
+    hora = now.strftime('%H:%M:%S')
+
+    # logger.info("====================================")
+    # logger.info(data_hora)
+    # logger.info(data)
+    # logger.info(hora)
+    # logger.info("====================================")
+
     for index, row in enumerate(csvreader):
         # populate lists
         if index:
-            logger.info("***********************************")
-            logger.info(row)
-            logger.info("***********************************")
+            # logger.info("***********************************")
+            # logger.info(row)
+            # logger.info("***********************************")
 
             data_cliente.append(
-                (row[0], row[1], row[2], row[3], row[4], row[2], row[3], row[4]))
+                (row[0], row[1], row[2], row[3], row[4], data_hora, data, hora, row[2], row[3], row[4], data_hora, data, hora))
 
-            data_especialista.append((row[4], row[5], row[5]))
+            data_especialista.append((row[4], row[5], row[4], row[5]))
 
     # Set columns and table name
     especialista_columns = ["funcional", "nome"]
-    key_columns = ["funcional"]
+    # key_columns = ["funcional"]
     table_name = "Especialista"
 
     insert_data(table_name=table_name, data=data_especialista,
-                columns=especialista_columns, key_columns=key_columns)
+                columns=especialista_columns)
 
-    cliente_columns = ["agencia", "conta", "nome", "saldo", "especialista_id"]
+    cliente_columns = ["agencia", "conta", "nome", "saldo", "especialista_id",
+                       "data_hora_encarteiramento", "data_encarteiramento", "horario_encarteiramento"]
     key_columns = ["agencia", "conta"]
     table_name = "Cliente"
 

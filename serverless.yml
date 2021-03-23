@@ -45,7 +45,7 @@ functions:
       - Effect: "Allow"
         Action:
           - secretsmanager:GetSecretValue
-        Resource: arn:aws:secretsmanager:us-east-1:938175376514:secret:db-customer-FXOczk
+        Resource: ${self:custom.environment.SECRET_ARN}
     events:
       - s3:
           bucket: ${self:custom.environment.BUCKET_NAME.${self:custom.stage}}
@@ -75,22 +75,21 @@ functions:
     iamRoleStatements:
       - Effect: "Allow"
         Action:
-          # - s3:GetObject
+          - s3:GetObject
           # - s3:ListBucket
-          - s3:*
+          # - s3:*
         Resource:
           - arn:aws:s3:::${self:custom.environment.BUCKET_NAME.${self:custom.stage}}
           - arn:aws:s3:::${self:custom.environment.BUCKET_NAME.${self:custom.stage}}/*
-      - Effect: "Allow"
-        Action:
-          - rds:*
-          - ec2:*
-          - logs:*
-        Resource: "*"
+      # - Effect: "Allow"
+      #   Action:
+      #     # - rds:*
+      #     - ec2:*
+      #   Resource: arn:aws:rds:us-east-1:938175376514:db:database-1
       - Effect: "Allow"
         Action:
           - secretsmanager:GetSecretValue
-        Resource: arn:aws:secretsmanager:us-east-1:938175376514:secret:db-customer-FXOczk
+        Resource: ${self:custom.environment.SECRET_ARN}
     events:
       - s3:
           bucket: ${self:custom.environment.BUCKET_NAME.${self:custom.stage}}
@@ -126,7 +125,7 @@ functions:
       - Effect: "Allow"
         Action:
           - secretsmanager:GetSecretValue
-        Resource: arn:aws:secretsmanager:us-east-1:938175376514:secret:db-customer-FXOczk
+        Resource: ${self:custom.environment.SECRET_ARN}
     events:
       - http:
           method: get
